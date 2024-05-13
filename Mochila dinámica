@@ -1,0 +1,33 @@
+class Elemento:
+        def __init__(self, valores, pesos):
+                self.valores = valores
+                self.pesos = pesos
+
+def mochila_01(W, elementos):
+        n = len(elementos.valores)
+        # Función de recurrencia para calcular el valor máximo
+        def f(i, w):
+                if i == 0 or w == 0:
+                        return 0
+                elif elementos.pesos[i - 1] > w:
+                        return f(i - 1, w)
+                else:
+                        return max(elementos.valores[i - 1] + f(i - 1, w - elementos.pesos[i - 1]), f(i - 1, w))
+                # Llamar a la función de recurrencia para obtener el valor máximo
+        max_valor = f(n, W)
+                # Reconstruir la lista de artículos seleccionados
+        seleccionados = [ ]
+        i, w = n, W
+        while i > 0 and max_valor > 0:
+                if f(i, w) != f(i - 1, w):
+                        seleccionados.append(i - 1)
+                        w -= elementos.pesos[i - 1]
+                i -= 1
+                # Retornar el valor máximo y los artículos seleccionados
+        return max_valor, seleccionados[::-1]
+# Datos 
+W = 4
+elementos = Elemento([31, 47, 14], [2, 3, 1])
+max_valor, art_seleccionados = mochila_01(W, elementos)
+print("Valor máximo que se puede obtener:", max_valor)
+print("Artículos seleccionados:", art_seleccionados)
