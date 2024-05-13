@@ -1,0 +1,38 @@
+class Elemento:
+        def __init__(self, valores, pesos):
+                self.valores = valores
+                self.pesos = pesos
+
+def mochila_fuerza_bruta(W, elementos):
+        n = len(elementos.valores)
+        mejor_valor = 0
+        mejor_combinacion = None
+
+        # Función auxiliar para generar todas las combinaciones
+        def generar_combinaciones(i, valor, peso, combinacion, combinacion_binaria):
+                nonlocal mejor_valor, mejor_combinacion
+
+                # Verificar si la combinación actual es válida y si su valor es mejor que el mejor valor encontrado hasta ahora
+                if peso <= W and valor > mejor_valor:
+                        mejor_valor = valor
+                        mejor_combinacion = combinacion_binaria.copy()
+
+                # Generar combinaciones para el elemento siguiente
+                if i < n:
+                        # No incluir el elemento
+                        generar_combinaciones(i + 1, valor, peso, combinacion, combinacion_binaria)
+                        # Incluir el elemento
+                        combinacion_binaria[i] = 1
+                        generar_combinaciones(i + 1, valor + elementos.valores[i], peso + elementos.pesos[i], combinacion + [i], combinacion_binaria)
+                        combinacion_binaria[i] = 0  # Restaurar el valor original del elemento en el array binario
+
+        # Generar todas las combinaciones iniciando con un array binario de ceros
+        generar_combinaciones(0, 0, 0, [], [0] * n)
+        return mejor_valor, mejor_combinacion
+
+# Datos
+W = 4
+elementos = Elemento([31, 47, 14], [2, 3, 1])
+max_valor, art_seleccionados = mochila_fuerza_bruta(W, elementos)
+print("Valor máximo que se puede obtener:", max_valor)
+print("Artículos seleccionados (array binario):", art_seleccionados)
