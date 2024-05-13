@@ -1,0 +1,32 @@
+class Elemento:
+        def __init__(self, valores, pesos):
+                self.valores = valores
+                self.pesos = pesos
+                self.indices = [v / p for v, p in zip(valores, pesos)]  # Calculamos los índices en el constructor
+
+def mochila_fraccionaria(W, elementos):
+        n = len(elementos.valores)  # Usemos len(elementos.valores) para obtener la cantidad de elementos
+        indices = elementos.indices  # Usemos los índices precalculados
+        for i in range(n):
+                max = i
+                for j in range(i + 1, n):  # Corregimos el rango para evitar comparaciones redundantes
+                    if indices[j] > indices[max]:
+                        max = j
+                elementos.valores[i], elementos.valores[max] = elementos.valores[max], elementos.valores[i]
+                elementos.pesos[i], elementos.pesos[max] = elementos.pesos[max], elementos.pesos[i]
+                indices[i], indices[max] = indices[max], indices[i]  # También intercambiamos los índices
+        max_valor = 0
+        peso_total = 0
+        for i in range(n):
+            if peso_total + elementos.pesos[i] <= W:
+                max_valor += elementos.valores[i]
+                peso_total += elementos.pesos[i]
+            else:
+                max_valor += elementos.valores[i] * ((W - peso_total) / elementos.pesos[i])
+                break  # Salimos del bucle si no podemos agregar más elementos
+        return max_valor
+
+# Datos
+W = 4
+elementos = Elemento([31, 47, 14], [2, 3, 1])
+print("Valor máximo que se puede obtener:", mochila_fraccionaria(W, elementos))
