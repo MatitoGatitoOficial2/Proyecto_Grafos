@@ -3,7 +3,7 @@ class Elemento:
                 self.valores = valores
                 self.pesos = pesos
 
-def mochila_01(W, elementos):
+def mochila_dinamica(W, elementos):
         n = len(elementos.valores)
         # Función de recurrencia para calcular el valor máximo
         def f(i, w):
@@ -28,6 +28,6 @@ def mochila_01(W, elementos):
 # Datos 
 W = 4
 elementos = Elemento([31, 47, 14], [2, 3, 1])
-max_valor, art_seleccionados = mochila_01(W, elementos)
+max_valor, art_seleccionados = mochila_dinamica(W, elementos)
 print("Valor máximo que se puede obtener:", max_valor)
 print("Artículos seleccionados:", art_seleccionados)
